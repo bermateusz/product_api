@@ -1,0 +1,23 @@
+spring:
+  jpa:
+    database: POSTGRESQL
+  datasource:
+    driverClassName: org.postgresql.Driver
+    platform: postgres
+    url: "jdbc:postgresql://localhost:5432/postgres"
+    username: "postgres"
+    password: "mati"
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+flyway:
+  url: "jdbc:postgresql://localhost:5432/postgres"
+  schemas: currencies
+  user: "postgres"
+  password: "mati"
