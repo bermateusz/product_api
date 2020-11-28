@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/product")
 public class ProductController {
 
-    private final ProductService productService;
+        private final ProductService productService;
 
     public ProductController(ProductService productService) {
         this.productService = productService;
@@ -20,7 +20,6 @@ public class ProductController {
     @PostMapping(value = "importCsvFile")
     public void save(@RequestParam("file") MultipartFile file) throws Exception {
         productService.save(file);
-
     }
 }
 
