@@ -2,7 +2,8 @@ package com.bereda.product_api.service;
 
 import com.bereda.product_api.Repository.ProductRepository;
 import com.bereda.product_api.entity.Product;
-import com.bereda.product_api.model.ProductDTO;
+import com.bereda.product_api.external_api.model.ExternalExchangeRateResponse;
+import com.bereda.product_api.external_api.service.ExternalApiService;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,51 +22,33 @@ import java.util.Objects;
 public class ProductService {
 
     private final ProductRepository repository;
-    private final List<ProductDTO> productDTOList;
+    private final ExternalApiService externalApiService;
 
-    public ProductService(ProductRepository repository, List<ProductDTO> productDTOList) {
+    public ProductService(final ProductRepository repository, final ExternalApiService externalApiService) {
         this.repository = repository;
-        this.productDTOList = productDTOList;
+        this.externalApiService = externalApiService;
     }
-
-
 
     public void save(final MultipartFile file) {
+        final String baseCurrency = "PLN";
         try {
             final FileReader fileReader = new FileReader(convertMultiPartToFile(file));
             final CSVReader csvReader = new CSVReaderBuilder(fileReader)
                     .withSkipLines(1)
                     .build();
             final List<String[]> strings = csvReader.readAll();
-            for (String[] string : strings) {
-               Product product = Product.builder()
-                        .productName(string[0])
-                        .description(string[1])
-                        .price(Double.parseDouble(string[2]))
-                        .currency(string[3])
-                        .sku(string[4])
-                        .build();
-               repository.save(product);
-            }
+            strings.forEach(string -> repository.save(Product.builder()
+                    .productName(string[0].trim())
+                    .description(string[1].trim())
+                    .originalPrice(Double.parseDouble(string[2]))
+                    .originalCurrency(string[3].trim())
+                    .price(Double.parseDouble(string[2]) * externalApiService.exchangeRateRequest(string[3])
+                            .flatMap(ExternalExchangeRateResponse::getExchangeRate))
+                    .currency(baseCurrency)
+                    .sku(string[4].trim())
+                    .build()));
         } catch (Exception e) {
             log.error("Exception occurred when reading file.", e);
-        }
-    }
-
-    public List<String[]> readCsvFile(final MultipartFile file) {
-        try {
-            final FileReader fileReader = new FileReader(convertMultiPartToFile(file));
-            final CSVReader csvReader = new CSVReaderBuilder(fileReader)
-                    .withSkipLines(1)
-                    .build();
-            final List<String[]> strings = csvReader.readAll();
-            for (String[] string : strings) {
-                log.info(Arrays.toString(string));
-            }
-            return strings;
-        } catch (Exception e) {
-            log.error("Exception occurred when reading file.", e);
-            return null;
         }
     }
 

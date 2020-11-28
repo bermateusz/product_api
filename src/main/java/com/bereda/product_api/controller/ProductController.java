@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("/api/csv")
+@RequestMapping("/api/product")
 public class ProductController {
 
     private final ProductService productService;
@@ -17,7 +17,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @PostMapping
+    @PostMapping(value = "importCsvFile")
     public void save(@RequestParam("file") MultipartFile file) throws Exception {
         productService.save(file);
 

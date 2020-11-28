@@ -21,3 +21,6 @@ flyway:
   schemas: currencies
   user: "postgres"
   password: "mati"
+
+apiRequest:
+  url: http://slepy-currency-converter.herokuapp.com/api/currencies?from=
