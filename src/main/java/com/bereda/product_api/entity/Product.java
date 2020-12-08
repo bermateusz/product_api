@@ -17,10 +17,13 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_name")
+    Long id;
     String productName;
     String description;
+    Double originalPrice;
+    String originalCurrency;
     Double price;
     String currency;
     String sku;
+
 }
