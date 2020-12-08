@@ -1,0 +1,5 @@
+product_name     ,description        ,price,currency,SKU
+Fartuch          ,niebieski fartuszek,10   ,PLN     ,00-111-222
+Kawa             ,Tchibo             ,20   ,EUR     ,111-251-222
+Klawiatura       ,zielona            ,30   ,USD     ,1234-zzasd
+Produkt bez opisu,                   ,50   ,USD     ,222-aaaa-zzzz

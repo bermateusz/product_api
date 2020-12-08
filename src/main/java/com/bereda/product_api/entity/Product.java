@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Builder
 @Data
@@ -20,9 +21,9 @@ public class Product {
     Long id;
     String productName;
     String description;
-    Double originalPrice;
+    BigDecimal originalPrice;
     String originalCurrency;
-    Double price;
+    BigDecimal price;
     String currency;
     String sku;
 

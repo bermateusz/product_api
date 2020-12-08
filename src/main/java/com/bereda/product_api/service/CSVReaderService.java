@@ -7,44 +7,33 @@ import org.apache.commons.csv.CSVParser;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Service
 public class CSVReaderService {
 
-    public List<ProductDTO> ReaderCSV(final MultipartFile file) {
-        List<ProductDTO>list = new ArrayList<>();
+    public List<ProductDTO> parseFile(final MultipartFile file) {
+        List<ProductDTO> productDTOArrayList = new ArrayList<>();
         try {
-            final FileReader fileReader = new FileReader(convertMultiPartToFile(file));
-            final CSVParser csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT
+            final InputStreamReader streamReader = new InputStreamReader(file.getInputStream());
+            final CSVParser csvParser = new CSVParser(streamReader, CSVFormat.DEFAULT
                     .withFirstRecordAsHeader()
                     .withIgnoreHeaderCase()
                     .withTrim());
-            csvParser.forEach(record -> list.add(ProductDTO.builder()
+            csvParser.forEach(record -> productDTOArrayList.add(ProductDTO.builder()
                     .productName(record.get("product_name"))
-            .description(record.get("description"))
-            .price(Double.parseDouble(record.get("price")))
-            .currency(record.get("currency"))
-            .sku(record.get("sku"))
-            .build()));
+                    .description(record.get("description"))
+                    .price(new BigDecimal(record.get("price")))
+                    .currency(record.get("currency"))
+                    .sku(record.get("sku"))
+                    .build()));
         } catch (Exception e) {
             log.error("Exception occurred when reading file.", e);
         }
-        return list;
-    }
-
-    private File convertMultiPartToFile(MultipartFile file) throws IOException {
-        File convFile = new File(Objects.requireNonNull(file.getOriginalFilename()));
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
-        return convFile;
+        return productDTOArrayList;
     }
 }

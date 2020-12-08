@@ -5,11 +5,13 @@ import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Builder;
 import lombok.Value;
 
+import java.math.BigDecimal;
+
 @Builder
 @Value
 @JsonDeserialize(builder = ExternalExchangeRateResponse.ExternalExchangeRateResponseBuilder.class)
 public class ExternalExchangeRateResponse {
-    Double exchangeRate;
+    BigDecimal value;
 
     @JsonPOJOBuilder(withPrefix = "")
     public static final class ExternalExchangeRateResponseBuilder {

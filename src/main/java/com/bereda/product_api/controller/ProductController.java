@@ -1,6 +1,6 @@
 package com.bereda.product_api.controller;
 
-import com.bereda.product_api.service.ProductService;
+import com.bereda.product_api.service.ProductsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,18 +8,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
-@RequestMapping("/api/product")
+@RequestMapping("/api/products")
 public class ProductController {
 
-        private final ProductService productService;
+    private final ProductsService productsService;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController(final ProductsService productsService) {
+        this.productsService = productsService;
     }
 
-    @PostMapping(value = "importCsvFile")
-    public void save(@RequestParam("file") MultipartFile file) throws Exception {
-        productService.save(file);
+    @PostMapping(value = "import-csv-file")
+    public void processFile(@RequestParam("file") final MultipartFile file) throws Exception {
+        productsService.importProducts(file);
     }
 }
 
