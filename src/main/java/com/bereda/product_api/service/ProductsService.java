@@ -1,13 +1,16 @@
 package com.bereda.product_api.service;
 
-import com.bereda.product_api.Repository.ProductRepository;
 import com.bereda.product_api.entity.Product;
 import com.bereda.product_api.model.ProductDTO;
+import com.bereda.product_api.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -18,7 +21,6 @@ public class ProductsService {
     private final ProductRepository productRepository;
     private final CurrencyConversionService currencyConversionService;
     private final CSVReaderService csvReaderService;
-
 
     public ProductsService(final ProductRepository productRepository, final CurrencyConversionService currencyConversionService,
                            final CSVReaderService csvReaderService) {
