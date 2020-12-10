@@ -1,4 +1,4 @@
-package com.bereda.product_api.Repository;
+package com.bereda.product_api.repository;
 
 import com.bereda.product_api.entity.Product;
 import org.springframework.data.repository.CrudRepository;
